@@ -21,6 +21,10 @@ Split the input into two lists and then abuse Kotlins convenient Collection func
 
 Another easy day thanks to `windowed`, `any` and `all`. Brute forced part 2 with `filter` ond `indices`.
 
+### Day 03: Mull It Over
+
+Regex! The `.+?` pattern was key. Without, everything between the first "do" and the last "don't" would be removed.
+
 [^aoc]:
 [Advent of Code][aoc] – An annual event of Christmas-oriented programming challenges started December 2015.
 Every year since then, beginning on the first day of December, a programming puzzle is published every day for
