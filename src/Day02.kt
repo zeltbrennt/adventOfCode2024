@@ -1,15 +1,13 @@
-import kotlin.time.measureTime
-
-typealias Report = List<Int>
+typealias Report = List<Long>
 
 fun main() {
 
     fun Report.isSafe(strict: Boolean = true): Boolean {
         return if (strict) {
             if (this.first() < this.last()) {
-                this.windowed(2).all { it.last() - it.first() in 1..3 }
+                this.zipWithNext().all { it.second - it.first in 1..3 }
             } else {
-                this.windowed(2).all { it.first() - it.last() in 1..3 }
+                this.zipWithNext().all { it.first - it.second in 1..3 }
             }
         } else {
             indices.any { this.filterIndexed { index, _ -> index != it }.isSafe() }
@@ -17,26 +15,24 @@ fun main() {
     }
 
     fun inputToReports(input: List<String>): List<Report> {
-        return input.map { line -> line.split(" ").map { it.toInt() } }
+        return input.map { line -> line.split(" ").map { it.toLong() } }
     }
 
-    fun part1(input: List<String>): Int {
+    fun part1(input: List<String>): Long {
         val reports = inputToReports(input)
-        return reports.count { it.isSafe() }
+        return reports.count { it.isSafe() }.toLong()
     }
 
-    fun part2(input: List<String>): Int {
+    fun part2(input: List<String>): Long {
         val reports = inputToReports(input)
-        return reports.count { it.isSafe(false) }
+        return reports.count { it.isSafe(false) }.toLong()
     }
 
     // test before attempt to solve
     val testInput = readInput("Day02_test")
-    check(part1(testInput) == 2)
-    check(part2(testInput) == 4)
+    check(part1(testInput) == 2L)
+    check(part2(testInput) == 4L)
 
     // solve with real input
-    val input = readInput("Day02")
-    measureTime { print("Part 1: ${part1(input)}".padEnd(40, ' ')) }.also { println("$it") }
-    measureTime { print("Part 2: ${part2(input)}".padEnd(40, ' ')) }.also { println("$it") }
+    solve("Day02", ::part1, ::part2)
 }
