@@ -1,9 +1,11 @@
 fun main() {
 
+    val instructionPattern = Regex("""mul\((\d+),(\d+)\)""")
+    val deactivationPattern = Regex("""don't\(\).+?(do\(\)|$)""")
 
-    fun addMultiplications(input: String): Long {
-        return Regex("mul\\((\\d+),(\\d+)\\)")
-            .findAll(input)
+    fun String.addMultiplications(): Long {
+        return instructionPattern
+            .findAll(this)
             .sumOf {
                 val (a, b) = it.destructured
                 a.toLong() * b.toLong()
@@ -11,12 +13,14 @@ fun main() {
     }
 
     fun part1(input: List<String>): Long {
-        return addMultiplications(input.joinToString())
+        return input.joinToString().addMultiplications()
     }
 
     fun part2(input: List<String>): Long {
-        val filtered = input.joinToString().replace(Regex("don't\\(\\).+?(do\\(\\)|$)"), "")
-        return addMultiplications(filtered)
+        return input
+            .joinToString()
+            .replace(deactivationPattern, "")
+            .addMultiplications()
     }
 
     // test before attempt to solve
