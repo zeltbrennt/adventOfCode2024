@@ -15,5 +15,6 @@ fi
 
 touch src/Day${day}_test.txt
 
+git add src/Day$day.kt
 idea64 src/Day${day}_test.txt
 idea64 src/Day$day.kt
