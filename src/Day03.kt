@@ -2,14 +2,12 @@ fun main() {
 
 
     fun addMultiplications(input: String): Long {
-        return Regex("mul\\(\\d+,\\d+\\)")
+        return Regex("mul\\((\\d+),(\\d+)\\)")
             .findAll(input)
-            .map { it.value }
-            .map { instruction ->
-                Regex("\\d+")
-                    .findAll(instruction)
-                    .map { it.value.toLong() }
-            }.sumOf { it.first() * it.last() }
+            .sumOf {
+                val (a, b) = it.destructured
+                a.toLong() * b.toLong()
+            }
     }
 
     fun part1(input: List<String>): Long {
@@ -17,7 +15,7 @@ fun main() {
     }
 
     fun part2(input: List<String>): Long {
-        val filtered = input.joinToString().replace(Regex("don't\\(\\).+?do\\(\\)"), "")
+        val filtered = input.joinToString().replace(Regex("don't\\(\\).+?(do\\(\\)|$)"), "")
         return addMultiplications(filtered)
     }
 
