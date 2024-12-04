@@ -1,41 +1,43 @@
 data class Coord(val x: Int, val y: Int) {
 
-    /*
-     o --> +1
-     |
-     v
-     +1
-     */
+    /*******************
+
+    o --> +1
+    |
+    v
+    +1
+
+     *******************/
     fun north(): Coord {
-        return this.copy(y = y - 1)
+        return copy(y = y - 1)
     }
 
     fun south(): Coord {
-        return this.copy(y = y + 1)
+        return copy(y = y + 1)
     }
 
     fun east(): Coord {
-        return this.copy(x = x + 1)
+        return copy(x = x + 1)
     }
 
     fun west(): Coord {
-        return this.copy(x = x - 1)
+        return copy(x = x - 1)
     }
 
     fun northWest(): Coord {
-        return this.copy(x = x - 1, y = y - 1)
+        return copy(x = x - 1, y = y - 1)
     }
 
     fun northEast(): Coord {
-        return this.copy(x = x + 1, y = y - 1)
+        return copy(x = x + 1, y = y - 1)
     }
 
     fun southWest(): Coord {
-        return this.copy(x = x - 1, y = y + 1)
+        return copy(x = x - 1, y = y + 1)
     }
 
     fun southEast(): Coord {
-        return this.copy(x = x + 1, y = y + 1)
+        return copy(x = x + 1, y = y + 1)
     }
 
     fun neighbor(direction: Direction): Coord {
