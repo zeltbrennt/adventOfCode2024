@@ -1,6 +1,3 @@
-data class Coord(val x: Int, val y: Int)
-
-
 class Grid<T>(private val data: Map<Coord, T>) {
 
     /*******************
@@ -35,6 +32,10 @@ class Grid<T>(private val data: Map<Coord, T>) {
             }
         }
 
+        fun allNeighbors(origin: Coord) = allDirections.map { neighbor(origin, it) }
+        fun mainNeighbors(origin: Coord) = mainDirections.map { neighbor(origin, it) }
+        fun offNeighbors(origin: Coord) = offDirections.map { neighbor(origin, it) }
+
         val allDirections
             get() = listOf(
                 Direction.NORTH,
@@ -54,13 +55,35 @@ class Grid<T>(private val data: Map<Coord, T>) {
                 Direction.WEST,
                 Direction.EAST,
             )
+
+        val offDirections
+            get() = listOf(
+                Direction.NORTHWEST,
+                Direction.NORTHEAST,
+                Direction.SOUTHWEST,
+                Direction.SOUTHEAST,
+            )
     }
 
     val coords get() = data.keys
-    operator fun get(coord: Coord) = data[coord]
+    val minX get() = coords.minOf { it.x }
+    val maxX get() = coords.maxOf { it.x }
+    val minY get() = coords.minOf { it.y }
+    val maxY get() = coords.maxOf { it.y }
 
+    operator fun get(coord: Coord) = data[coord]
+    operator fun get(x: Int, y: Int) = data[Coord(x, y)]
+
+    override fun toString() = buildString {
+        for (y in minY..maxY) {
+            for (x in minX..maxX) {
+                this.append(data[Coord(x, y)] ?: '.')
+            }
+            this.append("\n")
+        }
+    }
 }
 
 enum class Direction { NORTH, SOUTH, EAST, WEST, NORTHEAST, SOUTHEAST, NORTHWEST, SOUTHWEST }
 
-
+data class Coord(val x: Int, val y: Int)
