@@ -25,6 +25,10 @@ Another easy day thanks to `windowed`, `any` and `all`. Brute forced part 2 with
 
 Regex! The `.+?` pattern was key. Without, everything between the first "do" and the last "don't" would be removed.
 
+### Day 04: Ceres Search
+
+Reimplement the grid again. Use OOP to have more expressive code.
+
 [^aoc]:
 [Advent of Code][aoc] – An annual event of Christmas-oriented programming challenges started December 2015.
 Every year since then, beginning on the first day of December, a programming puzzle is published every day for
