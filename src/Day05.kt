@@ -23,10 +23,15 @@ fun main() {
             }
     }
 
+    fun String.fixed(): List<String> {
+        return this.split(",")
+    }
+
     fun part2(input: List<String>): Long {
         val (invalidStates, updates) = parseInput(input)
-        updates.filter { update -> invalidStates.any { state -> update.contains(state) } }.forEach(::println)
-        return 0
+        return updates.filter { update -> invalidStates.any { state -> update.contains(state) } }
+            .map { it.fixed() }
+            .sumOf { it[it.lastIndex / 2].toLong() }
     }
 
     // test before attempt to solve
