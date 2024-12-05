@@ -1,70 +1,66 @@
-data class Coord(val x: Int, val y: Int) {
+data class Coord(val x: Int, val y: Int)
+
+
+class Grid<T>(private val data: Map<Coord, T>) {
 
     /*******************
 
-    o --> +1
+    o --> x+1
     |
     v
-    +1
+    y+1
 
      *******************/
-    fun north(): Coord {
-        return copy(y = y - 1)
-    }
 
-    fun south(): Coord {
-        return copy(y = y + 1)
-    }
+    companion object {
 
-    fun east(): Coord {
-        return copy(x = x + 1)
-    }
-
-    fun west(): Coord {
-        return copy(x = x - 1)
-    }
-
-    fun northWest(): Coord {
-        return copy(x = x - 1, y = y - 1)
-    }
-
-    fun northEast(): Coord {
-        return copy(x = x + 1, y = y - 1)
-    }
-
-    fun southWest(): Coord {
-        return copy(x = x - 1, y = y + 1)
-    }
-
-    fun southEast(): Coord {
-        return copy(x = x + 1, y = y + 1)
-    }
-
-    fun neighbor(direction: Direction): Coord {
-        return when (direction) {
-            Direction.NORTH -> north()
-            Direction.SOUTH -> south()
-            Direction.EAST -> east()
-            Direction.WEST -> west()
-            Direction.NORTHEAST -> northEast()
-            Direction.SOUTHEAST -> southEast()
-            Direction.NORTHWEST -> northWest()
-            Direction.SOUTHWEST -> southWest()
+        fun north(origin: Coord) = origin.copy(y = origin.y - 1)
+        fun south(origin: Coord) = origin.copy(y = origin.y + 1)
+        fun east(origin: Coord) = origin.copy(x = origin.x + 1)
+        fun west(origin: Coord) = origin.copy(x = origin.x - 1)
+        fun northEast(origin: Coord) = origin.copy(x = origin.x + 1, y = origin.y - 1)
+        fun northWest(origin: Coord) = origin.copy(x = origin.x - 1, y = origin.y - 1)
+        fun southEast(origin: Coord) = origin.copy(x = origin.x + 1, y = origin.y + 1)
+        fun southWest(origin: Coord) = origin.copy(x = origin.x - 1, y = origin.y + 1)
+        fun neighbor(origin: Coord, direction: Direction): Coord {
+            return when (direction) {
+                Direction.NORTH -> north(origin)
+                Direction.SOUTH -> south(origin)
+                Direction.EAST -> east(origin)
+                Direction.WEST -> west(origin)
+                Direction.NORTHEAST -> northEast(origin)
+                Direction.NORTHWEST -> northWest(origin)
+                Direction.SOUTHEAST -> southEast(origin)
+                Direction.SOUTHWEST -> southWest(origin)
+            }
         }
-    }
-}
 
-typealias Grid<T> = Map<Coord, T>
+        val allDirections
+            get() = listOf(
+                Direction.NORTH,
+                Direction.SOUTH,
+                Direction.WEST,
+                Direction.EAST,
+                Direction.NORTHWEST,
+                Direction.NORTHEAST,
+                Direction.SOUTHWEST,
+                Direction.SOUTHEAST,
+            )
+
+        val mainDirections
+            get() = listOf(
+                Direction.NORTH,
+                Direction.SOUTH,
+                Direction.WEST,
+                Direction.EAST,
+            )
+    }
+
+    val coords get() = data.keys
+    operator fun get(coord: Coord) = data[coord]
+
+}
 
 enum class Direction { NORTH, SOUTH, EAST, WEST, NORTHEAST, SOUTHEAST, NORTHWEST, SOUTHWEST }
 
-val allDirections = listOf(
-    Direction.NORTH,
-    Direction.SOUTH,
-    Direction.WEST,
-    Direction.EAST,
-    Direction.NORTHWEST,
-    Direction.NORTHEAST,
-    Direction.SOUTHWEST,
-    Direction.SOUTHEAST,
-)
+
