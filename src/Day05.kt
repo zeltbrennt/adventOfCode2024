@@ -13,18 +13,6 @@ fun main() {
         return rules.toList() to updates.toList()
     }
 
-    fun part1(input: List<String>): Long {
-        val (rules, updates) = parseInput(input)
-        val invalidStates = rules.map { it.split("|").reversed().joinToString(",") }
-        return updates
-            .filter { update -> invalidStates.none { state -> update.contains(state) } }
-            .sumOf {
-                val pages = it.split(",")
-                pages[pages.lastIndex / 2].toLong()
-            }
-    }
-
-
     fun String.fixWith(rules: List<String>): List<String> {
         return this.split(",").sortedWith { a, b ->
             when {
@@ -34,11 +22,17 @@ fun main() {
         }
     }
 
+    fun part1(input: List<String>): Long {
+        val (rules, updates) = parseInput(input)
+        return updates.map { it.fixWith(rules) }
+            .intersect(updates.map { it.split(",") }.toSet())
+            .sumOf { it[it.lastIndex / 2].toLong() }
+    }
+
     fun part2(input: List<String>): Long {
         val (rules, updates) = parseInput(input)
-        val invalidStates = rules.map { it.split("|").reversed().joinToString(",") }
-        return updates.filter { update -> invalidStates.any { state -> update.contains(state) } }
-            .map { it.fixWith(rules) }
+        return updates.map { it.fixWith(rules) }
+            .subtract(updates.map { it.split(",") }.toSet())
             .sumOf { it[it.lastIndex / 2].toLong() }
     }
 
