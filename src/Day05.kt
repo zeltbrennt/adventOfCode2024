@@ -2,19 +2,20 @@ fun main() {
 
 
     fun parseInput(input: List<String>): Pair<List<String>, List<String>> {
-        val rulesRev = mutableListOf<String>()
+        val rules = mutableListOf<String>()
         val updates = mutableListOf<String>()
         input.forEach {
             when {
-                "|" in it -> rulesRev.add(it.split("|").reversed().joinToString(","))
+                "|" in it -> rules.add(it)
                 "," in it -> updates.add(it)
             }
         }
-        return Pair(rulesRev.toList(), updates.toList())
+        return rules.toList() to updates.toList()
     }
 
     fun part1(input: List<String>): Long {
-        val (invalidStates, updates) = parseInput(input)
+        val (rules, updates) = parseInput(input)
+        val invalidStates = rules.map { it.split("|").reversed().joinToString(",") }
         return updates
             .filter { update -> invalidStates.none { state -> update.contains(state) } }
             .sumOf {
@@ -23,14 +24,21 @@ fun main() {
             }
     }
 
-    fun String.fixed(): List<String> {
-        return this.split(",")
+
+    fun String.fixWith(rules: List<String>): List<String> {
+        return this.split(",").sortedWith { a, b ->
+            when {
+                "$a|$b" in rules -> -1
+                else -> 1
+            }
+        }
     }
 
     fun part2(input: List<String>): Long {
-        val (invalidStates, updates) = parseInput(input)
+        val (rules, updates) = parseInput(input)
+        val invalidStates = rules.map { it.split("|").reversed().joinToString(",") }
         return updates.filter { update -> invalidStates.any { state -> update.contains(state) } }
-            .map { it.fixed() }
+            .map { it.fixWith(rules) }
             .sumOf { it[it.lastIndex / 2].toLong() }
     }
 
