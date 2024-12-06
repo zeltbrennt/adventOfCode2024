@@ -2,6 +2,7 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.readText
+import kotlin.time.Duration
 import kotlin.time.measureTime
 
 /**
@@ -23,7 +24,19 @@ fun Any?.println() = println(this)
 
 fun solve(day: String, part1: (List<String>) -> Number, part2: (List<String>) -> Number) {
     val input = readInput(day)
-    println("$day\n${"=".repeat(51)}")
-    measureTime { print("Part 1: ${part1(input)}".padEnd(40, ' ')) }.also { println("$it") }
-    measureTime { print("Part 2: ${part2(input)}".padEnd(40, ' ')) }.also { println("$it") }
+    println("\n $day\n${"=".repeat(50)}")
+    var result1: Number = 0
+    var result2: Number = 0
+    val time1 = measureTime { result1 = part1(input) }
+    println(" Part 1: ${result1.toString().padEnd(20, ' ')}${time1.pretty()}")
+    val time2 = measureTime { result2 = part2(input) }
+    println(" Part 2: ${result2.toString().padEnd(20, ' ')}${time2.pretty()}")
+}
+
+private fun Duration.pretty(): String {
+    val sec = (this.inWholeSeconds).toString()
+    val milli = (this.inWholeMilliseconds % 1_000).toString().padStart(5, ' ')
+    val micro = (this.inWholeMicroseconds % 1_000).toString().padStart(5, ' ')
+    val nano = (this.inWholeNanoseconds % 1000).toString().padStart(5, ' ')
+    return "${sec}s${milli}m${micro}u${nano}n"
 }
