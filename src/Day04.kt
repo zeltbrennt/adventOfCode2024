@@ -31,9 +31,9 @@ fun main() {
         }
     }
 
-    fun part1(input: List<String>): Long {
+    fun part1(input: List<String>): Int {
         val grid = inputToGrid(input)
-        return grid.coords.sumOf { grid.countXMAS(it) }.toLong()
+        return grid.coords.sumOf { grid.countXMAS(it) }
     }
 
     fun Grid<Char>.countCrossMAS(start: Coord): Int {
@@ -65,15 +65,15 @@ fun main() {
         }
     }
 
-    fun part2(input: List<String>): Long {
+    fun part2(input: List<String>): Int {
         val grid = inputToGrid(input)
-        return grid.coords.sumOf { grid.countCrossMAS(it) }.toLong()
+        return grid.coords.sumOf { grid.countCrossMAS(it) }
     }
 
     // test before attempt to solve
     val testInput = readInput("Day04_test")
-    check(part1(testInput) == 18L)
-    check(part2(testInput) == 9L)
+    check(part1(testInput) == 18)
+    check(part2(testInput) == 9)
 
     // solve with real input
     solve("Day04", ::part1, ::part2)

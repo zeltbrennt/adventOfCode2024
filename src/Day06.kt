@@ -39,9 +39,9 @@ fun main() {
         return path
     }
 
-    fun part1(input: List<String>): Long {
+    fun part1(input: List<String>): Int {
         val (grid, start) = inputToGrid(input)
-        return tracePath(grid, start).size.toLong()
+        return tracePath(grid, start).size
     }
 
     fun isLoop(grid: Grid<Char>, start: Coord, startDirection: Direction, obstacle: Coord): Boolean {
@@ -62,19 +62,19 @@ fun main() {
         return false
     }
 
-    fun part2(input: List<String>): Long {
+    fun part2(input: List<String>): Int {
         val (grid, start) = inputToGrid(input)
         val path = tracePath(grid, start)
 
         return path.count { obstacle ->
             isLoop(grid, start, Direction.NORTH, obstacle)
-        }.toLong()
+        }
     }
 
     // test before attempt to solve
     val testInput = readInput("Day06_test")
-    check(part1(testInput) == 41L)
-    check(part2(testInput) == 6L)
+    check(part1(testInput) == 41)
+    check(part2(testInput) == 6)
 
     // solve with real input
     solve("Day06", ::part1, ::part2)

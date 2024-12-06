@@ -22,24 +22,24 @@ fun main() {
         }
     }
 
-    fun part1(input: List<String>): Long {
+    fun part1(input: List<String>): Int {
         val (rules, updates) = parseInput(input)
         return updates.map { it.fixWith(rules) }
             .intersect(updates.map { it.split(",") }.toSet())
-            .sumOf { it[it.lastIndex / 2].toLong() }
+            .sumOf { it[it.lastIndex / 2].toInt() }
     }
 
-    fun part2(input: List<String>): Long {
+    fun part2(input: List<String>): Int {
         val (rules, updates) = parseInput(input)
         return updates.map { it.fixWith(rules) }
             .subtract(updates.map { it.split(",") }.toSet())
-            .sumOf { it[it.lastIndex / 2].toLong() }
+            .sumOf { it[it.lastIndex / 2].toInt() }
     }
 
     // test before attempt to solve
     val testInput = readInput("Day05_test")
-    check(part1(testInput) == 143L)
-    check(part2(testInput) == 123L)
+    check(part1(testInput) == 143)
+    check(part2(testInput) == 123)
 
     // solve with real input
     solve("Day05", ::part1, ::part2)
