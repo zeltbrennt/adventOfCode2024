@@ -29,46 +29,43 @@ fun main() {
         var direction = Direction.NORTH
         val path = mutableSetOf<Coord>()
         while (grid[guard] != null) {
-            if (grid[Grid.neighbor(guard, direction)] == '#') {
+            if (grid[Grid.next(guard, direction)] == '#') {
                 direction = direction.turn90DegreesRight()
             } else {
                 path.add(guard)
-                guard = Grid.neighbor(guard, direction)
+                guard = Grid.next(guard, direction)
             }
         }
         return path
     }
 
-    fun part1(input: List<String>): Int {
-        val (grid, start) = inputToGrid(input)
-        return tracePath(grid, start).size
-    }
-
-    fun isLoop(grid: Grid<Char>, start: Coord, startDirection: Direction, obstacle: Coord): Boolean {
+    fun Coord.producesLoopWith(floor: Grid<Char>, start: Coord, startDirection: Direction): Boolean {
         var guard = start
         var direction = startDirection
         val path = mutableMapOf<Coord, Direction>()
-        while (grid[guard] != null) {
+        while (floor[guard] != null) {
             if (path[guard] == direction) {
                 return true
             }
-            if (grid[Grid.neighbor(guard, direction)] == '#' || Grid.neighbor(guard, direction) == obstacle) {
+            if (floor[Grid.next(guard, direction)] == '#' || Grid.next(guard, direction) == this) {
                 direction = direction.turn90DegreesRight()
             } else {
                 path[guard] = direction
-                guard = Grid.neighbor(guard, direction)
+                guard = Grid.next(guard, direction)
             }
         }
         return false
     }
 
-    fun part2(input: List<String>): Int {
-        val (grid, start) = inputToGrid(input)
-        val path = tracePath(grid, start)
+    fun part1(input: List<String>): Int {
+        val (floor, start) = inputToGrid(input)
+        return tracePath(floor, start).size
+    }
 
-        return path.count { obstacle ->
-            isLoop(grid, start, Direction.NORTH, obstacle)
-        }
+    fun part2(input: List<String>): Int {
+        val (floor, start) = inputToGrid(input)
+        val obstacles = tracePath(floor, start)
+        return obstacles.count { it.producesLoopWith(floor, start, Direction.NORTH) }
     }
 
     // test before attempt to solve

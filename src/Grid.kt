@@ -19,7 +19,7 @@ class Grid<T>(private val data: Map<Coord, T>) {
         fun northWest(origin: Coord) = origin.copy(x = origin.x - 1, y = origin.y - 1)
         fun southEast(origin: Coord) = origin.copy(x = origin.x + 1, y = origin.y + 1)
         fun southWest(origin: Coord) = origin.copy(x = origin.x - 1, y = origin.y + 1)
-        fun neighbor(origin: Coord, direction: Direction): Coord {
+        fun next(origin: Coord, direction: Direction): Coord {
             return when (direction) {
                 Direction.NORTH -> north(origin)
                 Direction.SOUTH -> south(origin)
@@ -32,9 +32,9 @@ class Grid<T>(private val data: Map<Coord, T>) {
             }
         }
 
-        fun allNeighbors(origin: Coord) = allDirections.map { neighbor(origin, it) }
-        fun mainNeighbors(origin: Coord) = mainDirections.map { neighbor(origin, it) }
-        fun offNeighbors(origin: Coord) = offDirections.map { neighbor(origin, it) }
+        fun allNeighbors(origin: Coord) = allDirections.map { next(origin, it) }
+        fun mainNeighbors(origin: Coord) = mainDirections.map { next(origin, it) }
+        fun offNeighbors(origin: Coord) = offDirections.map { next(origin, it) }
 
         val allDirections
             get() = listOf(
@@ -66,6 +66,7 @@ class Grid<T>(private val data: Map<Coord, T>) {
     }
 
     val coords get() = data.keys
+    val values get() = data.values
     val minX get() = coords.minOf { it.x }
     val maxX get() = coords.maxOf { it.x }
     val minY get() = coords.minOf { it.y }

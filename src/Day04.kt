@@ -11,11 +11,11 @@ fun main() {
     }
 
     fun Grid<Char>.isXMAS(start: Coord, direction: Direction): Boolean {
-        var next = Grid.neighbor(start, direction)
+        var next = Grid.next(start, direction)
         if (this[next] == 'M') {
-            next = Grid.neighbor(next, direction)
+            next = Grid.next(next, direction)
             if (this[next] == 'A') {
-                next = Grid.neighbor(next, direction)
+                next = Grid.next(next, direction)
                 if (this[next] == 'S') {
                     return true
                 }
