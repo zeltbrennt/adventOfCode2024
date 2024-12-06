@@ -33,6 +33,12 @@ Reimplement the grid again. Use OOP to have more expressive code.
 
 The text hints about sorting all the time, so just build a comparator from the instructions.
 
+### Day 06: Guard Gallivant
+
+Good thing, I had a grid implementation ready, solved Part 1 quite fast. Part 2 is brute force again, runtime just above
+a second is not great,
+might be faster to only save the corners and have a more efficient storage.
+
 [^aoc]:
 [Advent of Code][aoc] – An annual event of Christmas-oriented programming challenges started December 2015.
 Every year since then, beginning on the first day of December, a programming puzzle is published every day for
