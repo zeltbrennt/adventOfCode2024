@@ -35,9 +35,9 @@ The text hints about sorting all the time, so just build a comparator from the i
 
 ### Day 06: Guard Gallivant
 
-Good thing, I had a grid implementation ready, solved Part 1 quite fast. Part 2 is brute force again, runtime just above
-a second is not great,
-might be faster to only save the corners and have a more efficient storage.
+Good thing, I had a grid implementation ready, solved Part 1 quite fast. Part 2 is brute force again, but with the use
+of coroutines, only checking coordinates from the original path and reducing memory access by only saving the turning
+points, I got the runtime down from 12s to 300ms :)
 
 [^aoc]:
 [Advent of Code][aoc] – An annual event of Christmas-oriented programming challenges started December 2015.

@@ -88,3 +88,5 @@ class Grid<T>(private val data: Map<Coord, T>) {
 enum class Direction { NORTH, SOUTH, EAST, WEST, NORTHEAST, SOUTHEAST, NORTHWEST, SOUTHWEST }
 
 data class Coord(val x: Int, val y: Int)
+
+data class GridVector(val point: Coord, val direction: Direction)

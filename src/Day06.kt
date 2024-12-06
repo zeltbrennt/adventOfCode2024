@@ -1,3 +1,7 @@
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
+
 fun main() {
 
     fun inputToGrid(input: List<String>): Pair<Grid<Char>, Coord> {
@@ -24,12 +28,12 @@ fun main() {
         }
     }
 
-    fun tracePath(grid: Grid<Char>, start: Coord): Set<Coord> {
+    fun tracePath(floor: Grid<Char>, start: Coord): Set<Coord> {
         var guard = start
         var direction = Direction.NORTH
         val path = mutableSetOf<Coord>()
-        while (grid[guard] != null) {
-            if (grid[Grid.next(guard, direction)] == '#') {
+        while (floor[guard] != null) {
+            if (floor[Grid.next(guard, direction)] == '#') {
                 direction = direction.turn90DegreesRight()
             } else {
                 path.add(guard)
@@ -39,18 +43,17 @@ fun main() {
         return path
     }
 
-    fun Coord.producesLoopWith(floor: Grid<Char>, start: Coord, startDirection: Direction): Boolean {
-        var guard = start
-        var direction = startDirection
-        val path = mutableMapOf<Coord, Direction>()
+    fun Coord.producesLoopWith(floor: Grid<Char>, start: GridVector): Boolean {
+        var guard = start.point
+        var direction = start.direction
+        val path = mutableSetOf<GridVector>()
         while (floor[guard] != null) {
-            if (path[guard] == direction) {
-                return true
-            }
             if (floor[Grid.next(guard, direction)] == '#' || Grid.next(guard, direction) == this) {
+                if (!path.add(GridVector(guard, direction))) {
+                    return true
+                }
                 direction = direction.turn90DegreesRight()
             } else {
-                path[guard] = direction
                 guard = Grid.next(guard, direction)
             }
         }
@@ -65,7 +68,13 @@ fun main() {
     fun part2(input: List<String>): Int {
         val (floor, start) = inputToGrid(input)
         val obstacles = tracePath(floor, start)
-        return obstacles.count { it.producesLoopWith(floor, start, Direction.NORTH) }
+        return runBlocking {
+            obstacles.map { obstacle ->
+                async(Dispatchers.Default) {
+                    obstacle.producesLoopWith(floor, GridVector(start, Direction.NORTH))
+                }
+            }.count { it.await() }
+        }
     }
 
     // test before attempt to solve
