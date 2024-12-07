@@ -34,9 +34,8 @@ fun solve(day: String, part1: (List<String>) -> Number, part2: (List<String>) ->
 }
 
 private fun Duration.pretty(): String {
-    val sec = (this.inWholeSeconds).toString()
+    val sec = (this.inWholeSeconds).toString().padStart(3, ' ')
     val milli = (this.inWholeMilliseconds % 1_000).toString().padStart(5, ' ')
-    val micro = (this.inWholeMicroseconds % 1_000).toString().padStart(5, ' ')
-    val nano = (this.inWholeNanoseconds % 1000).toString().padStart(5, ' ')
-    return "${sec}s${milli}m${micro}u${nano}n"
+    val micro = ((this.inWholeMicroseconds % 1_0000) / 10.0).toString().padStart(7, ' ')
+    return "${sec}s${milli}ms${micro}µs"
 }
