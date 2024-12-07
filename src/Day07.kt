@@ -12,27 +12,40 @@ fun main() {
     }
 
 
-    fun evaluatesTo(nums: List<Long>, test: Long, result: Long = 0L): Boolean {
-        if (nums.isEmpty()) {
-            return test == result
+    fun evaluatesWithAddMultiply(numbers: List<Long>, expected: Long, actual: Long = 0L): Boolean {
+        if (numbers.isEmpty()) {
+            return actual == expected
         }
-        val next = nums.first()
+        val next = numbers.first()
         return when {
-            evaluatesTo(nums.drop(1), test, result + next) -> true
-            evaluatesTo(nums.drop(1), test, result * next) -> true
+            evaluatesWithAddMultiply(numbers.drop(1), expected, actual + next) -> true
+            evaluatesWithAddMultiply(numbers.drop(1), expected, actual * next) -> true
+            else -> false
+        }
+    }
+
+    fun evaluatesWithAddMultiplyConcat(numbers: List<Long>, expected: Long, actual: Long = 0L): Boolean {
+        if (numbers.isEmpty()) {
+            return actual == expected
+        }
+        val next = numbers.first()
+        return when {
+            evaluatesWithAddMultiplyConcat(numbers.drop(1), expected, actual + next) -> true
+            evaluatesWithAddMultiplyConcat(numbers.drop(1), expected, actual * next) -> true
+            evaluatesWithAddMultiplyConcat(numbers.drop(1), expected, "$actual$next".toLong()) -> true
             else -> false
         }
     }
 
 
     fun part1(input: List<String>): Number {
-        val equations = parse(input)
-        return equations.filter { evaluatesTo(it.value, it.key) }.map { it.key }.sum()
+        val calibrations = parse(input)
+        return calibrations.filter { evaluatesWithAddMultiply(it.value, it.key) }.map { it.key }.sum()
     }
 
     fun part2(input: List<String>): Number {
-        val equations = parse(input)
-        return 0
+        val calibrations = parse(input)
+        return calibrations.filter { evaluatesWithAddMultiplyConcat(it.value, it.key) }.map { it.key }.sum()
     }
 
     // test before attempt to solve
