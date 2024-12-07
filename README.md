@@ -39,6 +39,11 @@ Good thing, I had a grid implementation ready, solved Part 1 quite fast. Part 2 
 of coroutines, only checking coordinates from the original path and reducing memory access by only saving the turning
 points, I got the runtime down from 12s to 300ms :)
 
+### Day 06: Bridge Repair
+
+Came up with a recursive solution that solves Part 2 in 1.5 Seconds. Did not manage to get Coroutines working,
+memoization was also not helping.
+
 [^aoc]:
 [Advent of Code][aoc] – An annual event of Christmas-oriented programming challenges started December 2015.
 Every year since then, beginning on the first day of December, a programming puzzle is published every day for
