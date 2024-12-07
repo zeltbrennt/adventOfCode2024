@@ -28,6 +28,9 @@ fun main() {
         if (numbers.isEmpty()) {
             return actual == expected
         }
+        if (actual > expected) {
+            return false
+        }
         val next = numbers.first()
         return when {
             evaluatesWithAddMultiplyConcat(numbers.drop(1), expected, actual + next) -> true
