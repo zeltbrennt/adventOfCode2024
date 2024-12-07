@@ -12,30 +12,31 @@ fun main() {
     }
 
 
-    fun evaluatesWithAddMultiply(numbers: List<Long>, expected: Long, actual: Long = 0L): Boolean {
-        if (numbers.isEmpty()) {
+    fun evaluatesWithAddMultiply(numbers: List<Long>, expected: Long, actual: Long, idx: Int = 1): Boolean {
+        if (actual > expected) {
+            return false
+        }
+        if (idx > numbers.lastIndex) {
             return actual == expected
         }
-        val next = numbers.first()
         return when {
-            evaluatesWithAddMultiply(numbers.drop(1), expected, actual + next) -> true
-            evaluatesWithAddMultiply(numbers.drop(1), expected, actual * next) -> true
+            evaluatesWithAddMultiply(numbers, expected, actual + numbers[idx], idx + 1) -> true
+            evaluatesWithAddMultiply(numbers, expected, actual * numbers[idx], idx + 1) -> true
             else -> false
         }
     }
 
-    fun evaluatesWithAddMultiplyConcat(numbers: List<Long>, expected: Long, actual: Long = 0L): Boolean {
-        if (numbers.isEmpty()) {
-            return actual == expected
-        }
+    fun evaluatesWithAddMultiplyConcat(numbers: List<Long>, expected: Long, actual: Long, idx: Int = 1): Boolean {
         if (actual > expected) {
             return false
         }
-        val next = numbers.first()
+        if (idx > numbers.lastIndex) {
+            return actual == expected
+        }
         return when {
-            evaluatesWithAddMultiplyConcat(numbers.drop(1), expected, actual + next) -> true
-            evaluatesWithAddMultiplyConcat(numbers.drop(1), expected, actual * next) -> true
-            evaluatesWithAddMultiplyConcat(numbers.drop(1), expected, "$actual$next".toLong()) -> true
+            evaluatesWithAddMultiplyConcat(numbers, expected, actual + numbers[idx], idx + 1) -> true
+            evaluatesWithAddMultiplyConcat(numbers, expected, actual * numbers[idx], idx + 1) -> true
+            evaluatesWithAddMultiplyConcat(numbers, expected, "$actual${numbers[idx]}".toLong(), idx + 1) -> true
             else -> false
         }
     }
@@ -43,12 +44,16 @@ fun main() {
 
     fun part1(input: List<String>): Number {
         val calibrations = parse(input)
-        return calibrations.filter { evaluatesWithAddMultiply(it.value, it.key) }.map { it.key }.sum()
+        return calibrations.filter {
+            evaluatesWithAddMultiply(it.value, it.key, it.value.first())
+        }.keys.sum()
     }
 
     fun part2(input: List<String>): Number {
         val calibrations = parse(input)
-        return calibrations.filter { evaluatesWithAddMultiplyConcat(it.value, it.key) }.map { it.key }.sum()
+        return calibrations.filter {
+            evaluatesWithAddMultiplyConcat(it.value, it.key, it.value.first())
+        }.keys.sum()
     }
 
     // test before attempt to solve
