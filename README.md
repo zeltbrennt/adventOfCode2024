@@ -42,7 +42,7 @@ points, I got the runtime down from 12s to 300ms :)
 ### Day 06: Bridge Repair
 
 Came up with a recursive solution that solves Part 2 in 1.5 Seconds. Did not manage to get Coroutines working,
-memoization was also not helping.
+memoization was also not helping. The key was to not manipulate the list, instead increasing a pointer.
 
 [^aoc]:
 [Advent of Code][aoc] – An annual event of Christmas-oriented programming challenges started December 2015.
