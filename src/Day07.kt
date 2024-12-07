@@ -26,17 +26,36 @@ fun main() {
         }
     }
 
-    fun evaluatesWithAddMultiplyConcat(numbers: List<Long>, expected: Long, actual: Long, idx: Int = 1): Boolean {
-        if (actual > expected) {
-            return false
-        }
-        if (idx > numbers.lastIndex) {
-            return actual == expected
-        }
+    fun evaluatesWithAddMultiplyConcat(numbers: List<Long>, result: Long, idx: Int): Boolean {
+
+        val resultString = result.toString()
+        val numberString = numbers[idx].toString()
+
         return when {
-            evaluatesWithAddMultiplyConcat(numbers, expected, actual + numbers[idx], idx + 1) -> true
-            evaluatesWithAddMultiplyConcat(numbers, expected, actual * numbers[idx], idx + 1) -> true
-            evaluatesWithAddMultiplyConcat(numbers, expected, "$actual${numbers[idx]}".toLong(), idx + 1) -> true
+            idx == 0 -> result == numbers[0]
+            result == 0L -> false
+
+            resultString.endsWith(numberString) &&
+                    evaluatesWithAddMultiplyConcat(
+                        numbers,
+                        resultString.removeSuffix(numberString).toLongOrNull() ?: 0,
+                        idx - 1
+                    ) -> true
+
+            result % numbers[idx] == 0L &&
+                    evaluatesWithAddMultiplyConcat(
+                        numbers,
+                        result / numbers[idx],
+                        idx - 1
+                    ) -> true
+
+            result - numbers[idx] > 0L &&
+                    evaluatesWithAddMultiplyConcat(
+                        numbers,
+                        result - numbers[idx],
+                        idx - 1
+                    ) -> true
+
             else -> false
         }
     }
@@ -52,7 +71,7 @@ fun main() {
     fun part2(input: List<String>): Number {
         val calibrations = parse(input)
         return calibrations.filter {
-            evaluatesWithAddMultiplyConcat(it.value, it.key, it.value.first())
+            evaluatesWithAddMultiplyConcat(it.value, it.key, it.value.lastIndex)
         }.keys.sum()
     }
 
