@@ -1,4 +1,6 @@
-class Grid<T>(private val data: Map<Coord, T>) {
+import kotlinx.coroutines.flow.combineTransform
+
+class Grid<T>(val data: Map<Coord, T>) {
 
     /*******************
 
@@ -85,8 +87,22 @@ class Grid<T>(private val data: Map<Coord, T>) {
     }
 }
 
+fun inputToSparseGrid(input: List<String>): Grid<Char> {
+    return Grid(buildMap {
+        input.forEachIndexed { y, row ->
+            row.forEachIndexed { x, value ->
+                if (value != '.') this[Coord(x, y)] = value
+            }
+        }
+    })
+}
+
 enum class Direction { NORTH, SOUTH, EAST, WEST, NORTHEAST, SOUTHEAST, NORTHWEST, SOUTHWEST }
 
-data class Coord(val x: Int, val y: Int)
+data class Coord(val x: Int, val y: Int) {
+
+    operator fun plus(other: Coord) = this.copy(x = x + other.x, y = y + other.y)
+    operator fun minus(other: Coord) = this.copy(x = x - other.x, y = y - other.y)
+}
 
 data class GridVector(val point: Coord, val direction: Direction)
