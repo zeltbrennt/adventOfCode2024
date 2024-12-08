@@ -103,6 +103,7 @@ data class Coord(val x: Int, val y: Int) {
 
     operator fun plus(other: Coord) = this.copy(x = x + other.x, y = y + other.y)
     operator fun minus(other: Coord) = this.copy(x = x - other.x, y = y - other.y)
+    operator fun times(scale: Int) = this.copy(x = x * scale, y = y * scale)
 }
 
 data class GridVector(val point: Coord, val direction: Direction)
