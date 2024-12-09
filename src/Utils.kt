@@ -2,6 +2,9 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.readText
+import kotlin.math.ceil
+import kotlin.math.log10
+import kotlin.math.pow
 import kotlin.time.Duration
 import kotlin.time.measureTime
 
@@ -34,8 +37,27 @@ fun solve(day: String, part1: (List<String>) -> Number, part2: (List<String>) ->
 }
 
 private fun Duration.pretty(): String {
-    val sec = (this.inWholeSeconds).toString().padStart(3, ' ')
+    val sec = this.inWholeSeconds
     val milli = (this.inWholeMilliseconds % 1_000).toString().padStart(5, ' ')
     val micro = ((this.inWholeMicroseconds % 1_0000) / 10.0).toString().padStart(7, ' ')
-    return "${sec}s${milli}ms${micro}µs"
+    return "${if (sec > 0L) sec.toString().padStart(3, ' ') + "s" else ""}${milli}ms${micro}us"
+}
+
+fun concat(a: Long, b: Long): Long {
+    if (b < 10) return a * 10 + b
+    var aShifted = a * 10
+    var bRemain = b / 10
+    while (bRemain > 0) {
+        aShifted *= 10
+        bRemain /= 10
+    }
+    return aShifted + b
+}
+
+fun endsWith(a: Long, b: Long): Boolean {
+    return a % 10.0.pow(getNumberOfDigits(b)).toLong() == b
+}
+
+fun getNumberOfDigits(a: Long): Int {
+    return ceil(log10(a.toFloat())).toInt()
 }
