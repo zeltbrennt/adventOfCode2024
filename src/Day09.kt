@@ -1,3 +1,5 @@
+import kotlin.math.sin
+
 fun main() {
 
     fun parse(input: List<String>): MutableList<Int?> {
@@ -17,7 +19,16 @@ fun main() {
         return disc
     }
 
+    data class File(val id: Int, val size: Int, var position: Int) {
+        override fun toString() = "$id".repeat(size)
+    }
+    data class Space(var size: Int, var position: Int) {
+        override fun toString(): String  = ".".repeat(size)
+    }
+
+
     fun part1(input: List<String>): Number {
+
         val disc = parse(input)
         var nextSpot = 0
         var nextBlock = disc.lastIndex
@@ -56,29 +67,33 @@ fun main() {
     }
 
     fun part2(input: List<String>): Number {
-        val disc = parse(input)
 
-        for (file in disc.max() downTo 1) {
-            var fileIdx = disc.lastIndexOf(file)
-            var fileSize = 1
-            // determine file size
-            while (disc[fileIdx - 1] == file) {
-                fileIdx--
-                fileSize++
+        val files = mutableListOf<File>()
+        val spaces = mutableListOf<Space>()
+        var pos = 0
+        input[0].mapIndexed { i, x ->
+            if (i % 2 == 0) {
+                files.add(File(i/2, x.digitToInt(), pos))
+            } else {
+                spaces.add(Space(x.digitToInt(), pos))
             }
-            //search spot
-            var emptyIdx = disc.findNextSpot(fileSize, fileIdx) ?: continue
-            // move the file as
-            while (fileSize > 0) {
-                disc[emptyIdx] = disc[fileIdx]
-                disc[fileIdx] = null
-                fileSize--
-                fileIdx++
-                emptyIdx++
-            }
-            //println(disc.joinToString("") { if (it == -1L) "." else it.toString() })
+            pos += x.digitToInt()
+
         }
-        return disc.mapIndexed { i, x -> (x?.times(i))?.toLong() ?: 0L }.sum().also(::println)
+
+        for (file in files.reversed()) {
+            try {
+                val space = spaces.first { it.size >= file.size && it.position < file.position }
+                file.position = space.position
+                space.size -= file.size
+                space.position += file.size
+            } catch (e: NoSuchElementException) {
+                continue
+            }
+        }
+        return files
+            .flatMap { file -> (file.position..<file.position + file.size).map { it * file.id } }
+            .sumOf { it.toLong() }
     }
 
     // test before attempt to solve
