@@ -1,15 +1,15 @@
 fun main() {
 
-    fun parse(input: List<String>): MutableList<Long> {
-        val disc = mutableListOf<Long>()
+    fun parse(input: List<String>): MutableList<Int?> {
+        val disc = mutableListOf<Int?>()
         input[0].mapIndexed { i, x ->
             if (i % 2 == 0) {
                 repeat(x.digitToInt()) {
-                    disc.add(i.toLong() / 2)
+                    disc.add(i / 2)
                 }
             } else {
                 repeat(x.digitToInt()) {
-                    disc.add(-1L)
+                    disc.add(null)
                 }
             }
 
@@ -19,30 +19,32 @@ fun main() {
 
     fun part1(input: List<String>): Number {
         val disc = parse(input)
-        var nextEmpty = 0
-        var nextMove = disc.lastIndex
+        var nextSpot = 0
+        var nextBlock = disc.lastIndex
         do {
-            while (disc[nextEmpty] != -1L) {
-                nextEmpty++
+            while (disc[nextSpot] != null) {
+                nextSpot++
             }
-            while (disc[nextMove] == -1L) {
-                nextMove--
+            while (disc[nextBlock] == null) {
+                nextBlock--
             }
-            disc[nextEmpty] = disc[nextMove]
-            disc[nextMove] = -1
-        } while (nextEmpty < nextMove)
-        return disc.filter { it >= 0 }.mapIndexed { i, x -> i * x }.sum()
+            disc[nextSpot] = disc[nextBlock]
+            disc[nextBlock] = null
+            nextSpot++
+            nextBlock--
+        } while (nextSpot < nextBlock)
+        return disc.mapIndexed { i, x -> x?.toLong()?.times(i) ?: 0  }.sum()
     }
 
-    fun List<Long>.findNextSpot(fileSize: Int, stop: Int): Int {
-        // returns the index of the next spot, or -1
+    fun List<Int?>.findNextSpot(fileSize: Int, stop: Int): Int? {
+        // returns the index of the next spot, or null
         var emptyIndex = 0
         do {
-            while (this[emptyIndex] != -1L) {
+            while (this[emptyIndex] != null) {
                 emptyIndex++
             }
             var space = 1
-            while (this[emptyIndex + space] == -1L) {
+            while (this[emptyIndex + space] == null) {
                 space++
             }
             if (space >= fileSize) {
@@ -50,7 +52,7 @@ fun main() {
             }
             emptyIndex += space
         } while (emptyIndex < stop)
-        return -1
+        return null
     }
 
     fun part2(input: List<String>): Number {
@@ -65,21 +67,18 @@ fun main() {
                 fileSize++
             }
             //search spot
-            var emptyIdx = disc.findNextSpot(fileSize, fileIdx)
-            if (emptyIdx == -1) {
-                continue
-            }
+            var emptyIdx = disc.findNextSpot(fileSize, fileIdx) ?: continue
             // move the file as
             while (fileSize > 0) {
                 disc[emptyIdx] = disc[fileIdx]
-                disc[fileIdx] = -1L
+                disc[fileIdx] = null
                 fileSize--
                 fileIdx++
                 emptyIdx++
             }
             //println(disc.joinToString("") { if (it == -1L) "." else it.toString() })
         }
-        return disc.mapIndexed { i, x -> if (x >= 0L) i * x else 0L }.sum()
+        return disc.mapIndexed { i, x -> (x?.times(i))?.toLong() ?: 0L }.sum().also(::println)
     }
 
     // test before attempt to solve
