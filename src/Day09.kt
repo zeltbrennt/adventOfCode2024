@@ -1,5 +1,3 @@
-import kotlin.math.sin
-
 fun main() {
 
     fun parse(input: List<String>): MutableList<Int?> {
@@ -18,14 +16,6 @@ fun main() {
         }
         return disc
     }
-
-    data class File(val id: Int, val size: Int, var position: Int) {
-        override fun toString() = "$id".repeat(size)
-    }
-    data class Space(var size: Int, var position: Int) {
-        override fun toString(): String  = ".".repeat(size)
-    }
-
 
     fun part1(input: List<String>): Number {
 
@@ -47,35 +37,21 @@ fun main() {
         return disc.mapIndexed { i, x -> x?.toLong()?.times(i) ?: 0  }.sum()
     }
 
-    fun List<Int?>.findNextSpot(fileSize: Int, stop: Int): Int? {
-        // returns the index of the next spot, or null
-        var emptyIndex = 0
-        do {
-            while (this[emptyIndex] != null) {
-                emptyIndex++
-            }
-            var space = 1
-            while (this[emptyIndex + space] == null) {
-                space++
-            }
-            if (space >= fileSize) {
-                return emptyIndex
-            }
-            emptyIndex += space
-        } while (emptyIndex < stop)
-        return null
+
+    data class Block(val id: Int? = null, var size: Int, var position: Int) {
+        override fun toString() = "${id ?: '.'}".repeat(size)
     }
 
     fun part2(input: List<String>): Number {
 
-        val files = mutableListOf<File>()
-        val spaces = mutableListOf<Space>()
+        val files = mutableListOf<Block>()
+        val spaces = mutableListOf<Block>()
         var pos = 0
         input[0].mapIndexed { i, x ->
             if (i % 2 == 0) {
-                files.add(File(i/2, x.digitToInt(), pos))
+                files.add(Block(id = i / 2, size = x.digitToInt(), position =  pos))
             } else {
-                spaces.add(Space(x.digitToInt(), pos))
+                spaces.add(Block(size = x.digitToInt(), position = pos))
             }
             pos += x.digitToInt()
 
@@ -92,8 +68,9 @@ fun main() {
             }
         }
         return files
-            .flatMap { file -> (file.position..<file.position + file.size).map { it * file.id } }
-            .sumOf { it.toLong() }
+            .flatMap { file ->
+                (file.position..<file.position + file.size).map { it * file.id!! }
+            }.sumOf { it.toLong() }
     }
 
     // test before attempt to solve
