@@ -39,7 +39,7 @@ Good thing, I had a grid implementation ready, solved Part 1 quite fast. Part 2 
 of coroutines, only checking coordinates from the original path and reducing memory access by only saving the turning
 points, I got the runtime down from 12s to 300ms :)
 
-### Day 06: Bridge Repair
+### Day 07: Bridge Repair
 
 Came up with a recursive solution that solves Part 2 in 1.5 Seconds. Did not manage to get Coroutines working,
 memoization was also not helping. The key was to not manipulate the list, instead increasing a pointer... without
@@ -47,6 +47,17 @@ mutable data,
 the execution time went town to just half a second.
 The final big improvement came from hint to reverse the operations. This way, the tree was pruning much faster. Down to
 below 20ms.
+
+### Day 08: Resonant Collinearity
+
+Again made use of the Grid-Class and extended a little Grid-Vector functionality. Then just a little Vector Math..
+
+### Day 09:
+
+First time much pain, I still don't know what went wrong with my initial solution.
+Now just update the positon of files, size and start of empty space and done.
+Interestingly, I didn't need to update the space left behind by the files, because there will never be a file inserted
+into this space. Breaks the visualisation, but the solution is correct.
 
 [^aoc]:
 [Advent of Code][aoc] – An annual event of Christmas-oriented programming challenges started December 2015.
