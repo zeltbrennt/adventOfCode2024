@@ -34,13 +34,11 @@ fun main() {
             nextSpot++
             nextBlock--
         } while (nextSpot < nextBlock)
-        return disc.mapIndexed { i, x -> x?.toLong()?.times(i) ?: 0  }.sum()
+        return disc.mapIndexed { i, x -> x?.toLong()?.times(i) ?: 0 }.sum()
     }
 
 
-    data class Block(val id: Int? = null, var size: Int, var position: Int) {
-        override fun toString() = "${id ?: '.'}".repeat(size)
-    }
+    data class Block(val id: Int = 0, var size: Int, var position: Int)
 
     fun part2(input: List<String>): Number {
 
@@ -49,7 +47,7 @@ fun main() {
         var pos = 0
         input[0].mapIndexed { i, x ->
             if (i % 2 == 0) {
-                files.add(Block(id = i / 2, size = x.digitToInt(), position =  pos))
+                files.add(Block(id = i / 2, size = x.digitToInt(), position = pos))
             } else {
                 spaces.add(Block(size = x.digitToInt(), position = pos))
             }
@@ -69,7 +67,7 @@ fun main() {
         }
         return files
             .flatMap { file ->
-                (file.position..<file.position + file.size).map { it * file.id!! }
+                (file.position..<file.position + file.size).map { it * file.id }
             }.sumOf { it.toLong() }
     }
 
