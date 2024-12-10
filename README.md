@@ -52,12 +52,16 @@ below 20ms.
 
 Again made use of the Grid-Class and extended a little Grid-Vector functionality. Then just a little Vector Math..
 
-### Day 09:
+### Day 09: Disk Fragmenter
 
 First time much pain, I still don't know what went wrong with my initial solution.
 Now just update the positon of files, size and start of empty space and done.
 Interestingly, I didn't need to update the space left behind by the files, because there will never be a file inserted
 into this space. Breaks the visualisation, but the solution is correct.
+
+### Day 10: Hoof It
+
+Simple recursive DFS, accidentally solved part 2 before part 1, lol
 
 [^aoc]:
 [Advent of Code][aoc] – An annual event of Christmas-oriented programming challenges started December 2015.
