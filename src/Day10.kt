@@ -9,25 +9,13 @@ fun main() {
         }
     }
 
-    fun Coord.score(topMap: Grid<Int>, peaksRached: MutableList<Coord>, current: Int = 0): MutableList<Coord> {
-        if (current == 9) {
+    fun Coord.score(topoMap: Grid<Int>, peaksRached: MutableList<Coord>, elevation: Int = 0): MutableList<Coord> {
+        if (elevation == 9) {
             peaksRached.add(this)
         }
-        val west = Grid.west(this)
-        val east = Grid.east(this)
-        val north = Grid.north(this)
-        val south = Grid.south(this)
-        if ((topMap[west] ?: 0) == current + 1) {
-            west.score(topMap, peaksRached, current + 1)
-        }
-        if ((topMap[east] ?: 0) == current + 1) {
-            east.score(topMap, peaksRached, current + 1)
-        }
-        if ((topMap[north] ?: 0) == current + 1) {
-            north.score(topMap, peaksRached, current + 1)
-        }
-        if ((topMap[south] ?: 0) == current + 1) {
-            south.score(topMap, peaksRached, current + 1)
+        Grid.mainNeighbors(this).forEach {
+            if ((topoMap[it] ?: 0) == elevation + 1)
+                it.score(topoMap, peaksRached, elevation + 1)
         }
         return peaksRached
     }
