@@ -2,42 +2,45 @@ import kotlin.math.pow
 
 fun main() {
 
-    fun blink(stone: Long, depth: Int, memo: MutableMap<Pair<Long, Int>, Long>) : Long{
-        val nDigits = getNumberOfDigits(stone)
+    fun blink(stone: Long, depth: Int, cache: MutableMap<Pair<Long, Int>, Long>) : Long {
+        if (stone to depth in cache) return cache[stone to depth]!!
         when {
-            stone to depth in memo -> return memo[stone to depth]!!
             depth == 0 -> {
-                memo[stone to 0] = 1
+                cache[stone to 0] = 1
                 return 1
             }
+
             stone == 0L -> {
-                memo[0L to depth] = blink(1, depth - 1, memo)
-                return memo[0L to depth]!!
-            }
-            nDigits % 2 == 0 -> {
-                val split = 10.0.pow(nDigits / 2).toLong()
-                memo[stone to depth] =  blink(stone / split, depth - 1,memo) +
-                                        blink(stone % split, depth - 1,memo)
-                return memo[stone to depth]!!
-            }
-            else -> {
-                memo[stone to depth] = blink(stone * 2024, depth - 1, memo)
-                return memo[stone to depth]!!
+                cache[0L to depth] = blink(1, depth - 1, cache)
+                return cache[0L to depth]!!
             }
         }
+        val nDigits = getNumberOfDigits(stone)
+        when {
+            nDigits % 2 == 0 -> {
+                val split = 10.0.pow(nDigits / 2).toLong()
+                cache[stone to depth] = blink(stone / split, depth - 1,cache) +
+                                        blink(stone % split, depth - 1,cache)
+                return cache[stone to depth]!!
+            }
+            else -> {
+                cache[stone to depth] = blink(stone * 2024, depth - 1, cache)
+                return cache[stone to depth]!!
+            }
+        }
+    }
 
+    fun solve(input: List<String>, times: Int): Long {
+        val cache = mutableMapOf<Pair<Long, Int>,Long>()
+        return input[0].split(" ").sumOf { blink(it.toLong(), times, cache) }
     }
 
     fun part1(input: List<String>): Number {
-         return input[0].split(" ").sumOf {
-             blink(it.toLong(), 25, mutableMapOf())
-         }
+         return solve(input, 25)
     }
 
     fun part2(input: List<String>): Number {
-        return input[0].split(" ").sumOf {
-            blink(it.toLong(), 75, mutableMapOf())
-        }
+        return solve(input, 75)
     }
 
     // test before attempt to solve
