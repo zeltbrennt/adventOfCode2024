@@ -3,6 +3,7 @@ import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.readText
 import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.math.log10
 import kotlin.math.pow
 import kotlin.time.Duration
@@ -59,5 +60,5 @@ fun endsWith(a: Long, b: Long): Boolean {
 }
 
 fun getNumberOfDigits(a: Long): Int {
-    return ceil(log10(a.toFloat())).toInt()
+    return floor(1 + log10(a.toFloat())).toInt()
 }
