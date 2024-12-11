@@ -63,6 +63,13 @@ into this space. Breaks the visualisation, but the solution is correct.
 
 Simple recursive DFS, accidentally solved part 2 before part 1, lol
 
+### Day 11: Plutonian Pebbles 
+
+Main insights: We do not care about the values on the stones. It's a binary tree.
+So we just need to know if a stone has one or two children.
+Use recursive DFS to find the last node, and bubble up the answer. 
+For Part two, a cache was paramount, brought the runtime down from literally years to just Milliseconds.
+
 [^aoc]:
 [Advent of Code][aoc] – An annual event of Christmas-oriented programming challenges started December 2015.
 Every year since then, beginning on the first day of December, a programming puzzle is published every day for
