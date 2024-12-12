@@ -63,12 +63,17 @@ into this space. Breaks the visualisation, but the solution is correct.
 
 Simple recursive DFS, accidentally solved part 2 before part 1, lol
 
-### Day 11: Plutonian Pebbles 
+### Day 11: Plutonian Pebbles
 
 Main insights: We do not care about the values on the stones. It's a binary tree.
 So we just need to know if a stone has one or two children.
-Use recursive DFS to find the last node, and bubble up the answer. 
+Use recursive DFS to find the last node, and bubble up the answer.
 For Part two, a cache was paramount, brought the runtime down from literally years to just Milliseconds.
+
+### Day 12: Garden Groups
+
+Part 1 was easy enough with BFS. Part 2 was tricky, so many *edge cases* so one couldn't cut any *corners*...
+In the end, found a reliable method to count the corners, since number of corners and numbers of edges must be the same.
 
 [^aoc]:
 [Advent of Code][aoc] – An annual event of Christmas-oriented programming challenges started December 2015.
