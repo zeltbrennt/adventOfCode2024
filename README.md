@@ -75,6 +75,11 @@ For Part two, a cache was paramount, brought the runtime down from literally yea
 Part 1 was easy enough with BFS. Part 2 was tricky, so many *edge cases* so one couldn't cut any *corners*...
 In the end, found a reliable method to count the corners, since number of corners and numbers of edges must be the same.
 
+### Day 13: Claw Contraption
+
+I initaly solved part 1 with Dijkstra, but I had a hunch, this would bite me for part 2 and it did.
+In the end, I solved the Linear Algebra problem, which was also much faster for part 1.
+
 [^aoc]:
 [Advent of Code][aoc] – An annual event of Christmas-oriented programming challenges started December 2015.
 Every year since then, beginning on the first day of December, a programming puzzle is published every day for
