@@ -80,6 +80,14 @@ In the end, found a reliable method to count the corners, since number of corner
 I initaly solved part 1 with Dijkstra, but I had a hunch, this would bite me for part 2 and it did.
 In the end, I solved the Linear Algebra problem, which was also much faster for part 1.
 
+### Day 14: Restroom Redoubt
+
+What a day, my favorite so far. Part 1 was easy enough, but for part 2 thinking outside the box was required.
+That twist came truly unexpected.
+In the end, it's anomaly detection in the variance of the x and y coordiantes of the robots.
+Could have implemented a ANOVA, but in the end just checking against a relative difference above a reasonable cutoff was
+enough.
+
 [^aoc]:
 [Advent of Code][aoc] – An annual event of Christmas-oriented programming challenges started December 2015.
 Every year since then, beginning on the first day of December, a programming puzzle is published every day for
