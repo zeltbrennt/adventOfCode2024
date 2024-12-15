@@ -88,6 +88,10 @@ In the end, it's anomaly detection in the variance of the x and y coordiantes of
 Could have implemented a ANOVA, but in the end just checking against a relative difference above a reasonable cutoff was
 enough.
 
+### Day 15: Warehouse Woes
+
+This was more tedious than hard, obvious solution did work, but was a little tricky to implement the larger boxes.
+
 [^aoc]:
 [Advent of Code][aoc] – An annual event of Christmas-oriented programming challenges started December 2015.
 Every year since then, beginning on the first day of December, a programming puzzle is published every day for
