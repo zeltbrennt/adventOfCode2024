@@ -1,3 +1,5 @@
+import kotlinx.coroutines.processNextEventInCurrentThread
+
 fun main() {
 
     fun parseDirections(line: String, list: MutableList<Direction>) {
@@ -63,7 +65,11 @@ fun main() {
     fun attemptToMove(warhouse: MutableMap<Coord, Char>, position: Coord, direction: Direction) {
         val next = Grid.next(position, direction)
         if (warhouse[next] == '#') return
-        if (warhouse[next] == 'O') attemptToMove(warhouse, next, direction)
+        if (warhouse[next] == 'O' || warhouse[next] == '[' || warhouse[next] == ']') attemptToMove(
+            warhouse,
+            next,
+            direction
+        )
         if (warhouse[next] == '.') {
             val tmp = warhouse[next]!!
             warhouse[next] = warhouse[position]!!
@@ -71,6 +77,41 @@ fun main() {
             return
         }
     }
+
+    fun attemptToMoveVertically(
+        warhouse: MutableMap<Coord, Char>,
+        position: Coord,
+        direction: Direction,
+        update: MutableSet<Pair<Coord, Coord>>,
+        secondHalf: Boolean,
+    ) {
+        val next = warhouse[Grid.next(position, direction)]!!
+        if (next == '#') throw Error("blocked")
+        update.add(position to Grid.next(position, direction))
+        if (warhouse[position]!! == '[' && !secondHalf) attemptToMoveVertically(
+            warhouse,
+            Grid.east(position),
+            direction,
+            update,
+            true
+        ) else if (warhouse[position]!! == ']' && !secondHalf) attemptToMoveVertically(
+            warhouse,
+            Grid.west(position),
+            direction,
+            update,
+            true
+        )
+        if (next in "[]") {
+            attemptToMoveVertically(
+                warhouse,
+                Grid.next(position, direction),
+                direction,
+                update,
+                false
+            )
+        }
+    }
+
 
     fun toString(warhouse: MutableMap<Coord, Char>) = buildString {
 
@@ -97,15 +138,42 @@ fun main() {
 
     fun part2(input: List<String>): Number {
         val (warehouse, moves) = parse2(input)
-        println(toString(warehouse))
-        return 0
+        var robot = warehouse.filter { it.value == '@' }.keys.first()
+        //println("Initial position")
+        //print(toString(warehouse))
+        moves.forEach { move ->
+            // println("Move $move")
+            if (move == Direction.NORTH || move == Direction.SOUTH) {
+                try {
+                    val newPositions = mutableSetOf<Pair<Coord, Coord>>()
+                    attemptToMoveVertically(warehouse, robot, move, newPositions, false)
+                    newPositions
+                        .sortedBy { if (move == Direction.NORTH) it.second.y else -it.second.y }
+                        .forEach {
+                            warehouse[it.second] = warehouse[it.first]!!
+                            warehouse[it.first] = '.'
+                        }
+                } catch (_: Error) {
+                    // blocked
+                }
+            } else {
+                attemptToMove(warehouse, robot, move)
+            }
+            robot = Grid.mainNeighbors(robot).firstOrNull { warehouse[it] == '@' } ?: robot
+            // println(toString(warehouse))
+        }
+        //println(toString(warehouse))
+        return warehouse.filter { it.value == '[' }.keys.sumOf { it.y * 100 + it.x }
     }
 
-    // test before attempt to solve
+// test before attempt to solve
     check(part1(readInput("Day15_test_small")) == 2028)
     check(part1(readInput("Day15_test_big")) == 10092)
+
+    //part2(readInput("Day15_test_p2_small"))
+
     check(part2(readInput("Day15_test_big")) == 9021)
 
-    // solve with real input
+// solve with real input
     solve("Day15", ::part1, ::part2)
 }
