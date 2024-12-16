@@ -65,6 +65,28 @@ class Grid<T>(val data: Map<Coord, T>) {
                 Direction.SOUTHWEST,
                 Direction.SOUTHEAST,
             )
+
+        fun left(init: Direction) = when (init) {
+            Direction.NORTH -> Direction.WEST
+            Direction.SOUTH -> Direction.EAST
+            Direction.WEST -> Direction.SOUTH
+            Direction.EAST -> Direction.NORTH
+            Direction.NORTHEAST -> Direction.SOUTHWEST
+            Direction.SOUTHEAST -> Direction.NORTHWEST
+            Direction.NORTHWEST -> Direction.SOUTHEAST
+            Direction.SOUTHWEST -> Direction.NORTHWEST
+        }
+
+        fun right(init: Direction) = when (init) {
+            Direction.NORTH -> Direction.EAST
+            Direction.SOUTH -> Direction.WEST
+            Direction.WEST -> Direction.NORTH
+            Direction.EAST -> Direction.SOUTH
+            Direction.NORTHEAST -> Direction.SOUTHEAST
+            Direction.SOUTHEAST -> Direction.NORTHWEST
+            Direction.NORTHWEST -> Direction.SOUTHWEST
+            Direction.SOUTHWEST -> Direction.NORTHWEST
+        }
     }
 
     val coords get() = data.keys
