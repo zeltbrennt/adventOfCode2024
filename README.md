@@ -92,6 +92,27 @@ enough.
 
 This was more tedious than hard, obvious solution did work, but was a little tricky to implement the larger boxes.
 
+### Day 16: Reindeer Maze (*WIP*)
+
+Part 1 was easy enough, just with a Priority Queue, have an idea for part 2, but I get confused all the time...
+
+### Day 17: Chronospatial Computer (*WIP*)
+
+Implementing the Intcode Computer was fun, but finding the (presumably very large) initial value for part 2 is not at
+the moment.
+Will probably search backwards again.
+
+### Day 18: RAM Run
+
+Another maze, thankfully not dynamic. Dijkstra to the resque. Brute force for part 2 was ok, but made it under half a
+second by just checking if the path is still possible,
+when a byte falls on the last shortest path.
+
+### Day 19: Linen Layout
+
+Again, starting from the end was enough to get the search space small. But for part 2, memoization was needed.
+Would have been easy, if not for a sneaky off-by-one-error.
+
 [^aoc]:
 [Advent of Code][aoc] – An annual event of Christmas-oriented programming challenges started December 2015.
 Every year since then, beginning on the first day of December, a programming puzzle is published every day for
