@@ -37,19 +37,28 @@ fun main() {
         return steps
     }
 
+    fun solve2(input: List<String>, maxCoord: Int, nByte: Int) : Float {
+        for(byte in nByte..input.lastIndex) {
+            if (solve(input, maxCoord, byte) == 0) {
+                return input[byte-1].replace(",", ".").toFloat()
+            }
+        }
+        return 0F
+    }
+
 
     fun part1(input: List<String>): Number {
         return solve(input, 70, 1024)
     }
 
     fun part2(input: List<String>): Number {
-        return 0
+        return solve2(input, 70, 1024)
     }
 
     // test before attempt to solve
     val testInput = readInput("Day18_test")
     check(solve(testInput, 6, 12) == 22)
-    //check(part2(testInput) == 0L)
+    check(solve2(testInput, 6, 12) == 6.1F)
 
     // solve with real input
     solve("Day18", ::part1, ::part2)
