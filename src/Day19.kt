@@ -13,20 +13,37 @@ fun main() {
         return suffix.any { this.substringBefore(it).canBeMadeWith(substrings) }
     }
 
+    fun String.howManyCombinationsWith(substrings: List<String>, cache: MutableMap<String, Long>): Long {
+        if (this.isBlank()) return 1L
+        if (cache[this] != null) return cache[this]!!
+        val suffix = substrings.filter { this.startsWith(it) }
+        if (suffix.isEmpty()) {
+            cache[this] = 0L
+            return 0L
+        }
+        cache[this] = suffix.sumOf { this.substringAfter(it).howManyCombinationsWith(substrings, cache) }
+        return cache[this]!!
+
+    }
+
     fun part1(input: List<String>): Number {
         val (towels, patterns) = parse(input)
         return patterns.count { it.canBeMadeWith(towels) }
     }
 
     fun part2(input: List<String>): Number {
-        return 0
+        val (towels, patterns) = parse(input)
+        return patterns
+            .filter { it.canBeMadeWith(towels) }
+            .sumOf { it.howManyCombinationsWith(towels, mutableMapOf()) }
     }
 
     // test before attempt to solve
     val testInput = readInput("Day19_test")
     check(part1(testInput) == 6)
-    //check(part2(testInput) == 0L)
+    check(part2(testInput) == 16L)
 
+    //624787003961252 too low
     // solve with real input
     solve("Day19", ::part1, ::part2)
 }
