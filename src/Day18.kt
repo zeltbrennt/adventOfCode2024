@@ -1,16 +1,16 @@
 fun main() {
 
 
-    fun solve(input: List<String>, maxCoord: Int, nBytes: Int) : Int {
-        val blocked = buildSet{
+    fun solve(input: List<String>, maxCoord: Int, nBytes: Int): List<Coord> {
+        val blocked = buildSet {
             input.slice(0..<nBytes).forEach {
                 val line = it.split(",")
                 this.add(Coord(line.first().toInt(), line.last().toInt()))
             }
         }
-        val start = Coord(0,0)
+        val start = Coord(0, 0)
         val finish = Coord(maxCoord, maxCoord)
-        val path = mutableMapOf(start to start)
+        val connections = mutableMapOf(start to start)
         val visited = mutableSetOf(start)
         val queue = ArrayDeque<Coord>()
         queue.add(start)
@@ -19,28 +19,35 @@ fun main() {
             val current = queue.removeFirst()
             if (current == finish) break
             Grid.mainNeighbors(current)
-                .filter { it.x in 0..maxCoord && it.y in 0..maxCoord &&
-                        visited.contains(it).not() && blocked.contains(it).not() }
+                .filter {
+                    it.x in 0..maxCoord && it.y in 0..maxCoord &&
+                            visited.contains(it).not() && blocked.contains(it).not()
+                }
                 .forEach {
                     visited.add(it)
                     queue.add(it)
-                    path[it] = current
+                    connections[it] = current
                 }
         }
         //trace path
         var current = finish
-        var steps = 0
+        val path = mutableListOf<Coord>()
         while (current != start) {
-            current = path[current] ?: break
-            steps++
+            current = connections[current] ?: break
+            path.add(current)
         }
-        return steps
+        return path.reversed()
     }
 
-    fun solve2(input: List<String>, maxCoord: Int, nByte: Int) : Float {
-        for(byte in nByte..input.lastIndex) {
-            if (solve(input, maxCoord, byte) == 0) {
-                return input[byte-1].replace(",", ".").toFloat()
+    fun solve2(input: List<String>, maxCoord: Int, nByte: Int): Float {
+        var path = solve(input, maxCoord, 0)
+        input.forEachIndexed { i, byte ->
+            val coord = byte.split(",").map { it.trim().toInt() }
+            if (Coord(coord.first(), coord.last()) in path) {
+                path = solve(input, maxCoord, i + 1)
+                if (path.isEmpty()) {
+                    return byte.replace(",", ".").toFloat()
+                }
             }
         }
         return 0F
@@ -48,7 +55,7 @@ fun main() {
 
 
     fun part1(input: List<String>): Number {
-        return solve(input, 70, 1024)
+        return solve(input, 70, 1024).size
     }
 
     fun part2(input: List<String>): Number {
@@ -57,7 +64,7 @@ fun main() {
 
     // test before attempt to solve
     val testInput = readInput("Day18_test")
-    check(solve(testInput, 6, 12) == 22)
+    check(solve(testInput, 6, 12).size == 22)
     check(solve2(testInput, 6, 12) == 6.1F)
 
     // solve with real input
