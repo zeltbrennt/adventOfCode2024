@@ -113,6 +113,13 @@ when a byte falls on the last shortest path.
 Again, starting from the end was enough to get the search space small. But for part 2, memoization was needed.
 Would have been easy, if not for a sneaky off-by-one-error.
 
+### Day 20: Race Condition
+
+DFS to get the distance value for each tile was possible, since the original maze had only one path. `tailrec` allowed
+me to write it as a recursive function without hitting stack overflow. For part 1 it was enough to test twice in each
+direction for each position, if a shortcut is created. I reused the solution from part 2, since this is more general,
+but runs really badly. To get all shortcuts, BFS from each position.
+
 [^aoc]:
 [Advent of Code][aoc] – An annual event of Christmas-oriented programming challenges started December 2015.
 Every year since then, beginning on the first day of December, a programming puzzle is published every day for
