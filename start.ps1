@@ -28,5 +28,5 @@ if (-Not (Test-Path -Path "src\input\Day$day`_test.txt"))
 
 git add "src\Day$day.kt"
 
-fleet src\Day$day.kt
-fleet src\input\Day${day}_test.txt
+idea64 src\Day$day.kt
+idea64 src\input\Day${day}_test.txt
