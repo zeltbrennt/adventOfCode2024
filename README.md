@@ -120,6 +120,16 @@ me to write it as a recursive function without hitting stack overflow. For part 
 direction for each position, if a shortcut is created. I reused the solution from part 2, since this is more general,
 but runs really badly. To get all shortcuts, BFS from each position.
 
+### Day 21: Keypad Conundrum (*WIP*)
+
+Skipping this for now, have an idea witch BFS and caches, but I don't have time at the moment.
+
+### Day 22: Monkey Market
+
+Part 1 was straight forward, for part 2 I just brute forced it, after realizing, that I need to check for sequences that
+actually occur. Another approach must be more effective, but that gets the solution for now. Runs for about 12 Minutes,
+haha!
+
 [^aoc]:
 [Advent of Code][aoc] – An annual event of Christmas-oriented programming challenges started December 2015.
 Every year since then, beginning on the first day of December, a programming puzzle is published every day for
