@@ -1,4 +1,5 @@
 import kotlin.math.max
+import kotlin.math.roundToInt
 
 fun main() {
 
@@ -21,19 +22,17 @@ fun main() {
     }
 
     fun part2(input: List<String>): Number {
-        val prices = input.map { it.toLong() }
-            .associate {
-                (it % 10).toInt() to
-                        buildList {
-                            var secret = it
-                            repeat(10) {
-                                secret = nextSecret(secret)
-                                this.add((secret % 10).toInt())
-                            }
-                        }
+        val prices = input.map { it.toLong() }.associateWith {
+            buildList {
+                var secret = it
+                repeat(2000) {
+                    secret = nextSecret(secret)
+                    this.add((secret % 10).toInt())
+                }
             }
+        }
         val priceDiffs = prices.toList().associate {
-            it.first to (listOf(it.first) + it.second).zipWithNext { a, b -> b - a }
+            it.first to (listOf((it.first % 10).toInt()) + it.second).zipWithNext { a, b -> b - a }
         }
 
         val sequenceMap = mutableSetOf<List<Int>>()
@@ -41,17 +40,9 @@ fun main() {
             buyer.windowed(4).forEach { sequenceMap.add(it) }
         }
 
-
-        /*
-            todo: find the optimal sequence with the best result for all buyers
-            -> for every sequence, find it for every buyer
-            -> if found, add it to total
-            -> for every sequence, check if total is maximum
-
-            todo: find out why example sequence not in sequence map
-         */
-        // val sequenceMap = setOf(listOf(-2, 1, -1, 3))
+        // brute force
         var maxBananas = 0
+        var seqCount = 0
         for (seq in sequenceMap) {
             var bananas = 0
             for ((buyer, diff) in priceDiffs) {
@@ -69,6 +60,8 @@ fun main() {
                     }
                 }
             }
+            seqCount += 1
+            if (seqCount % 1000 == 0) println("${(seqCount / (sequenceMap.size.toFloat()) * 100).roundToInt()}% ($seqCount / ${sequenceMap.size})")
             maxBananas = max(maxBananas, bananas)
         }
         return maxBananas
@@ -76,9 +69,7 @@ fun main() {
 
     // test before attempt to solve
     val testInput = readInput("Day22_test")
-    val t1 = part1(testInput)
     check(part1(testInput) == 37327623L)
-    part2(listOf("123"))
     check(part2(readInput("Day22_test_2")) == 23)
 
     // solve with real input
