@@ -1,3 +1,5 @@
+import kotlin.math.max
+
 fun main() {
 
     fun nextSecret(number: Long): Long {
@@ -20,27 +22,56 @@ fun main() {
 
     fun part2(input: List<String>): Number {
         val prices = input.map { it.toLong() }
-            .map {
-                buildList {
-                    this.add((it % 10).toInt())
-                    var secret = it
-                    repeat(10) {
-                        secret = nextSecret(secret)
-                        this.add((secret % 10).toInt())
+            .associate {
+                (it % 10).toInt() to
+                        buildList {
+                            var secret = it
+                            repeat(10) {
+                                secret = nextSecret(secret)
+                                this.add((secret % 10).toInt())
+                            }
+                        }
+            }
+        val priceDiffs = prices.toList().associate {
+            it.first to (listOf(it.first) + it.second).zipWithNext { a, b -> b - a }
+        }
+
+        val sequenceMap = mutableSetOf<List<Int>>()
+        priceDiffs.values.forEach { buyer ->
+            buyer.windowed(4).forEach { sequenceMap.add(it) }
+        }
+
+
+        /*
+            todo: find the optimal sequence with the best result for all buyers
+            -> for every sequence, find it for every buyer
+            -> if found, add it to total
+            -> for every sequence, check if total is maximum
+
+            todo: find out why example sequence not in sequence map
+         */
+        // val sequenceMap = setOf(listOf(-2, 1, -1, 3))
+        var maxBananas = 0
+        for (seq in sequenceMap) {
+            var bananas = 0
+            for ((buyer, diff) in priceDiffs) {
+                for (i in 0..diff.lastIndex - 3) {
+                    var seqFound = true
+                    for (k in 0..3) {
+                        if (diff[i + k] != seq[k]) {
+                            seqFound = false
+                            break
+                        }
+                    }
+                    if (seqFound) {
+                        bananas += prices[buyer]!![i + 3]
+                        break
                     }
                 }
             }
-        val priceDiffs = prices.map {
-            it.zipWithNext { a, b -> b - a }
+            maxBananas = max(maxBananas, bananas)
         }
-        /*
-            maybe need to drop the initial price..
-            todo: given the optimal sequence, find the best price after
-            todo: find the optimal sequence for one buyer
-            todo: find the optimal sequence with the best result for all buyers
-         */
-        val optimalSequence = listOf(-1, 1, 0, 2)
-        return 0
+        return maxBananas
     }
 
     // test before attempt to solve
@@ -48,7 +79,7 @@ fun main() {
     val t1 = part1(testInput)
     check(part1(testInput) == 37327623L)
     part2(listOf("123"))
-    check(part2(testInput) == 0L)
+    check(part2(readInput("Day22_test_2")) == 23)
 
     // solve with real input
     solve("Day22", ::part1, ::part2)
