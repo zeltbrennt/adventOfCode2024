@@ -19,8 +19,27 @@ fun main() {
     }
 
     fun part2(input: List<String>): Number {
-
-
+        val prices = input.map { it.toLong() }
+            .map {
+                buildList {
+                    this.add((it % 10).toInt())
+                    var secret = it
+                    repeat(10) {
+                        secret = nextSecret(secret)
+                        this.add((secret % 10).toInt())
+                    }
+                }
+            }
+        val priceDiffs = prices.map {
+            it.zipWithNext { a, b -> b - a }
+        }
+        /*
+            maybe need to drop the initial price..
+            todo: given the optimal sequence, find the best price after
+            todo: find the optimal sequence for one buyer
+            todo: find the optimal sequence with the best result for all buyers
+         */
+        val optimalSequence = listOf(-1, 1, 0, 2)
         return 0
     }
 
