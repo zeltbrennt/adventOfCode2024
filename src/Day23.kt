@@ -25,7 +25,7 @@ fun main() {
     }
 
 
-    fun part1(input: List<String>): Number {
+    fun part1(input: List<String>): Int {
         val network = parse(input)
         val threes = mutableSetOf<List<String>>()
         network
@@ -34,14 +34,19 @@ fun main() {
         return threes.size
     }
 
-    fun part2(input: List<String>): Number {
-        return 0
+    fun part2(input: List<String>): String {
+        val network = parse(input)
+        val threes = mutableSetOf<List<String>>()
+        network
+            .filter { it.key.startsWith("t") }
+            .forEach { parent -> getInterconnectedThree(network, parent.key, threes) }
+        return threes.associate { it.joinToString(",") to it.size }.maxBy { it.value }.key
     }
 
     // test before attempt to solve
     val testInput = readInput("Day23_test")
     check(part1(testInput) == 7)
-    check(part2(testInput) == 0)
+    check(part2(testInput) == "co,de,ka,ta")
 
     // solve with real input
     solve("Day23", ::part1, ::part2)
