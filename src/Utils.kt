@@ -25,11 +25,11 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
  */
 fun Any?.println() = println(this)
 
-fun solve(day: String, part1: (List<String>) -> Number, part2: (List<String>) -> Number) {
+fun solve(day: String, part1: (List<String>) -> Any, part2: (List<String>) -> Any) {
     val input = readInput(day)
     println("\n $day\n${"=".repeat(50)}")
-    var result1: Number = 0
-    var result2: Number = 0
+    var result1: Any
+    var result2: Any
     val time1 = measureTime { result1 = part1(input) }
     println(" Part 1: ${result1.toString().padEnd(20, ' ')}${time1.pretty()}")
     val time2 = measureTime { result2 = part2(input) }
